@@ -1,12 +1,9 @@
-
-#include "vector.h"	
 #include <GL/glx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <X11/extensions/xf86vmode.h>
-#include <X11/keysym.h>
 
-
+#include "graphics.h"
+#include "vector.h"	
 
 void rotateShape(int vectSize, int axis[]){
 	
@@ -20,69 +17,66 @@ void rotateShape(int vectSize, int axis[]){
  * autogenerates the dimensions of the axis cuboids and their 
  * locations on the parent cuboid shape faces */
 
-
-
-void drawCube(float leng, float wid, float hei, float color){
-
-	struct direcType axisDims[6];
-	
-	
-    glLoadIdentity();
-    glBegin(GL_QUADS);
-	/* Build all cube face axis displays */
-    drawCuboid(leng, wid, hei, color);
-        
-        
-    glEnd();
-    
-}
-
 /*where width is the x axis of the front face, length is the z axis of the front face and y is the height of the front face of the cuboid*/
-void drawCuboid(float length, float width, float height, float color){
+
+/* 
+ * drawCuboid 
+ * origin at bottom left corner 
+ * width
+ * height
+ * depth 
+ */
+void drawCuboid(float width, float height, float depth){
 
 	glBegin(GL_QUADS);
 	    /* top of Polygon */
-        glColor3f(color, color, color);
-        glVertex3f(width, height, -length);
-        glVertex3f(-width, height, -length);
-        glVertex3f(-width, height, length);
-        glVertex3f(width, height, length);        
+        glVertex3f(0, height, depth);
+        glVertex3f(width, height, depth);
+        glVertex3f(width, height, 0);
+        glVertex3f(0, height, 0);        
         /* bottom of Polygon */
-        glColor3f(color, color, color);
-        glVertex3f(width, -height, length);
-        glVertex3f(-width, -height, length);
-        glVertex3f(-width, -height, -length);
-        glVertex3f(width, -height, -length);     
+        glVertex3f(0, 0, depth);
+        glVertex3f(width, 0, depth);
+        glVertex3f(width, 0, 0);
+        glVertex3f(0, 0, 0);  
         /* front of Polygon */
-        glColor3f(color, color, color);
-        glVertex3f(width, height, length);
-        glVertex3f(-width, height, length);
-        glVertex3f(-width, -height, length);
-        glVertex3f(width, -height, length);     
+        glVertex3f(width, height, depth);
+        glVertex3f(0, height, depth);
+        glVertex3f(0, 0, depth);
+        glVertex3f(width, 0, depth);
         /* back of Polygon */
-        glColor3f(color, color, color);
-        glVertex3f(-width, height, -length);
-        glVertex3f(width, height, -length);
-        glVertex3f(width, -height, -length);
-        glVertex3f(-width, -height, -length);  
+        glVertex3f(0, height, 0);
+        glVertex3f(width, height, 0);
+        glVertex3f(width, 0, 0);
+        glVertex3f(0, 0, 0);
         /* right side of Polygon */
-        glColor3f(color, color, color);
-        glVertex3f(width, height, -length);
-        glVertex3f(width, height, length);
-        glVertex3f(width, -height, length);
-        glVertex3f(width, -height, -length);  
+        glVertex3f(width, height, 0);
+        glVertex3f(width, height, depth);
+        glVertex3f(width, 0, depth);
+        glVertex3f(width, 0, 0);
         /* left side of Polygon */
-        glColor3f(color, color, color);
-        glVertex3f(-width, height, length);
-        glVertex3f(-width, height, -length);
-        glVertex3f(-width, -height, -length);
-        glVertex3f(-width, -height, length);
+        glVertex3f(0, height, depth);
+        glVertex3f(0, height, 0);
+        glVertex3f(0, 0, 0);
+        glVertex3f(0, 0, depth);
     glEnd();
 }
 
+/* drawAxes 
+ * - takes a scaling factor as an argument
+ */
 
-int main(int argc, char **argv){
+void drawAxes(float scale)
+{
+	/* rectangle in x direction */
+	glColor3f(1.0f,0.0f,0.0f);	
+	drawCuboid(1.0f, 0.1f, 0.1f);
+	
+	/* rectangle in y direction */
+	glColor3f(0.0f,1.0f,0.0f);	
+	drawCuboid(0.1f,1.0f,0.1f);
+	
+	/* rectangle in z direction */
+	glColor3f(0.0f,0.0f,1.0f);	
+	drawCuboid(0.1f,0.1f,1.0f);		
 }
-
-
-

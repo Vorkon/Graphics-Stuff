@@ -1,5 +1,7 @@
+#ifndef __GRAPHICS_H__
+#define __GRAPHICS_H__
 
-void drawCuboid(float length, float width, float height, float color); 
-/* where the color is between 0-255 */
+void drawCuboid(float width, float height, float depth);
+void drawAxes(float scale);
 
-void drawCube(float leng, float wid, float hei);
+#endif /* __GRAPHICS_H__ */

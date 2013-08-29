@@ -1,7 +1,7 @@
-CC = gcc -Wall -pedantic -ansi
+CC = gcc -Wall -pedantic
 
 all:
-	$(CC) lesson05.c graphics.c -o lesson05 -L/usr/X11R6/lib -lGL -lGLU -lXxf86vm
+	$(CC) main.c graphics.c -o main -lGL -lGLU `sdl-config --cflags --libs` --std=c99
 
 clean:
 	@echo Cleaning up...

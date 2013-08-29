@@ -26,7 +26,7 @@
 #define FALSE 0
 
 /* This is our SDL surface */
-SDL_Surface *surface;		//???
+SDL_Surface *surface; 
 
 /* function to release/destroy our resources and restoring the old desktop */
 void Quit( int returnCode )
