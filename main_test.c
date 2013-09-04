@@ -19,9 +19,9 @@
 #include "graphics.h"
 
 /* screen width, height, and bit depth */
-#define SCREEN_WIDTH  1024	//viewing screen dimensions 
-#define SCREEN_HEIGHT 768	// 480 gl units??
-#define SCREEN_BPP     16	//bits per pixel resolution
+#define SCREEN_WIDTH  1020	//viewing screen dimensions 
+#define SCREEN_HEIGHT 780	// 480 gl units??
+#define SCREEN_BPP     32	//bits per pixel resolution
 
 /* Define our booleans */
 #define TRUE  1
@@ -63,8 +63,8 @@ int resizeWindow( int width, int height )
 	glLoadIdentity( );
 
 	/* Set our perspective - sets the angle at which your view sees and the ratio
-	* and close/far proximity that the display ignores the objects view*/
-	gluPerspective( 45.0f, ratio, 0.1f, 100.0f );
+	 * and close/far proximity that the display ignores the objects view */
+	gluPerspective( 0.0f, ratio, 0.1f, 100.0f );
 
 	/* Make sure we're chaning the model view and not the projection */
 	glMatrixMode( GL_MODELVIEW );
@@ -111,43 +111,19 @@ int initGL( GLvoid )
 	glClearDepth( 1.0f );
 
 	/* Enables Depth Testing */
-	//glEnable( GL_DEPTH_TEST );
-	glDisable( GL_DEPTH_TEST );
+	glEnable( GL_DEPTH_TEST );
 
 	/* The Type Of Depth Test To Do */
 	glDepthFunc( GL_LEQUAL );
 
 	/* Really Nice Perspective Calculations */
 	glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
-	
-	
-	/* Set The Blending Function For Translucency */
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE);			
 
 	return( TRUE );
 }
 
-void glMoveCamera()
-{
-	glLoadIdentity();
-	
-	// move camera a distance r away from the center
-	glTranslatef(0.0f, 0.0f, -15.0f);
-
-	// rotate around y by 45 degrees 
-	glRotatef(-45.0f, 0, 1, 0);
-	// rotate around x by 45 degrees
-	glRotatef(-45.0f, 1, 0, 0);
-
-	// move to center of circle    
-	//glTranslatef(-cx, -cy, -cz)
-}
-
 int drawGLScene( GLvoid )
 {
-	//1gl unit = 1cm
-	
 	/* rotational vars for the triangle and quad, respectively */
 	static GLfloat rquad;
 	
@@ -158,62 +134,26 @@ int drawGLScene( GLvoid )
 	/* Clear The Screen And The Depth Buffer */
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+	/* move into the screen 6 units */
+	glLoadIdentity( );
+	glTranslatef( -1.0f, 0.0f, -6.0f );
+
+	/* Rotate The Quad On The X axis ( NEW ) */
+	//glRotatef( rquad, 1.0f, 0.0f, 0.0f );
+
 	/* Set The Color To Blue One Time Only */
 	//glColor3f( 0.5f, 0.5f, 1.0f);
-	const int DEPTH_SHIFT = 0.0f;
-	
-	//draw cube
-	glColor4f(0.9f, 0.9f, 0.0f, 0.3f);
-	glMoveCamera();
-	glTranslatef(-3.0f, -3.0f, -3.0f);
-	drawCuboid(6.0f, 6.0f, 6.0f);	
 
-	//draw cube outline
-	glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	drawCuboid(6.0f, 6.0f, 6.0f);	
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);	
-	
-	
-	//draw top axes
-	glMoveCamera();
-	//glLoadIdentity();
-	glTranslatef (0.0f, 4.9f, 0.0f);
-	glRotatef( rquad, 1.0f, 0.0f, 0.0f );
+	//drawCuboid(1.0f, 1.0f, 1.0f);
 	drawAxes(1.0f);
-	
-	//draw bottom axes
-	glMoveCamera();
-	glTranslatef( 0.0f, -4.9f,DEPTH_SHIFT);
-	glRotatef(rquad, 1.0f, 0.0f, 0.0f);
+		
+	/*translates the drawing position and draws each cube face axis in their respective positions parrallel faces lie aproximately 50mm apart... 
+	 *and sensors sit approximately 49mm apart probably with a maximum error of about 1mm*/
+	glTranslatef( 1.0f, 0.0f, 1.0f );
 	drawAxes(1.0f);
-	
-	//draw left axes	
-	glMoveCamera();
-	glTranslatef(-4.9f,0.0f, DEPTH_SHIFT);
-	glRotatef(rquad, 1.0f, 0.0f, 0.0f);	
-	drawAxes(1.0f);
-	
-	//draw right axes	
-	glMoveCamera();
-	glTranslatef(4.9f,0.0f, DEPTH_SHIFT);
-	glRotatef(rquad, 1.0f, 0.0f, 0.0f);	
-	drawAxes(1.0f);
-	
-	//draw front axes	
-	glMoveCamera();
-	glTranslatef(0.0f,0.0f, DEPTH_SHIFT+4.9f);
-	glRotatef(rquad, 1.0f, 0.0f, 0.0f);	
-	drawAxes(1.0f);
-	
-	//draw back axes	
-	glMoveCamera();
-	glTranslatef(0.0f,0.0f, DEPTH_SHIFT-4.9f);
-	glRotatef(rquad, 1.0f, 0.0f, 0.0f);	
-	drawAxes(1.0f);
-	
 
-	/* Draw it to the screen */
+
+	/* Draw it to the screen */	
 	SDL_GL_SwapBuffers( );
 
 	/* Gather our frames per second */
@@ -228,7 +168,7 @@ int drawGLScene( GLvoid )
 	}
 	
 	/* rotate axes */
-	rquad -=0.15f;
+	rquad -=2.0f;
 
 	return( TRUE );
 }
@@ -243,6 +183,7 @@ int main( int argc, char **argv )
 	SDL_Event event;
 	/* this holds some info about our display */
 	const SDL_VideoInfo *videoInfo;
+
 
 	/* initialize SDL */
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -301,44 +242,40 @@ int main( int argc, char **argv )
 	/* wait for events */ 
 	while ( !done )
 	{
-		/* handle the events in the queue */
-		while ( SDL_PollEvent( &event ) )
+	/* handle the events in the queue */
+
+	while ( SDL_PollEvent( &event ) )
+	{
+		switch( event.type )
 		{
-			switch( event.type )
+//		case SDL_ACTIVEEVENT:
+			
+		case SDL_VIDEORESIZE:
+		/* handle resize event */
+			surface = SDL_SetVideoMode( event.resize.w,
+			event.resize.h,
+			16, videoFlags );
+			if ( !surface )
 			{
-			case SDL_ACTIVEEVENT:
-				/* Something's happend with our focus
-				* If we lost focus or we are iconified, we
-				* shouldn't draw the screen
-				*/
-				//if ( event.active.gain == 0 )
-				
-				break;			    
-			case SDL_VIDEORESIZE:
-			/* handle resize event */
-				surface = SDL_SetVideoMode( event.resize.w,
-				event.resize.h,
-				16, videoFlags );
-				if ( !surface )
-				{
-					fprintf( stderr, "Could not get a surface after resize: %s\n", SDL_GetError( ) );
-					Quit( 1 );
-				}
-				resizeWindow( event.resize.w, event.resize.h );
-				break;
-			case SDL_KEYDOWN:
-				/* handle key presses */
-				handleKeyPress( &event.key.keysym );
-				break;
-			case SDL_QUIT:
-				/* handle quit requests */
-				done = TRUE;
-				break;
-			default:
-				break;
+				fprintf( stderr, "Could not get a surface after resize: %s\n", SDL_GetError( ) );
+				Quit( 1 );
 			}
+			resizeWindow( event.resize.w, event.resize.h );
+			break;
+		case SDL_KEYDOWN:
+			/* handle key presses */
+			handleKeyPress( &event.key.keysym );
+			break;
+		case SDL_QUIT:
+			/* handle quit requests */
+			done = TRUE;
+			break;
+		default:
+			break;
 		}
-		
+	}
+
+	/* draw the scene */
 		drawGLScene( );
 	}
 
