@@ -64,7 +64,7 @@ int resizeWindow( int width, int height )
 
 	/* Set our perspective - sets the angle at which your view sees and the ratio
 	* and close/far proximity that the display ignores the objects view*/
-	gluPerspective( 45.0f, ratio, 0.1f, 100.0f );
+	glOrtho(-512, 512, -768/2, 768/2, -768/2, 768/2);
 
 	/* Make sure we're chaning the model view and not the projection */
 	glMatrixMode( GL_MODELVIEW );
@@ -160,57 +160,56 @@ int drawGLScene( GLvoid )
 
 	/* Set The Color To Blue One Time Only */
 	//glColor3f( 0.5f, 0.5f, 1.0f);
-	const int DEPTH_SHIFT = 0.0f;
+	const int DEPTH_SHIFT = 10.0f;
 	
 	//draw cube
 	glColor4f(0.9f, 0.9f, 0.0f, 0.3f);
-	glMoveCamera();
-	glTranslatef(-3.0f, -3.0f, -3.0f);
-	drawCuboid(6.0f, 6.0f, 6.0f);	
+	glLoadIdentity();
+	glTranslatef(-64.0f, -64.0f, -64.0f);
+	drawCuboid(128.0f, 128.0f, 128.0f);	
 
 	//draw cube outline
 	glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	drawCuboid(6.0f, 6.0f, 6.0f);	
+	drawCuboid(128.0f, 128.0f, 128.0f);	
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);	
 	
 	
 	//draw top axes
-	glMoveCamera();
-	//glLoadIdentity();
-	glTranslatef (0.0f, 4.9f, 0.0f);
+	glLoadIdentity();
+	glTranslatef (512.0f*2.0f/3.0f, 768.0f/3.0f, DEPTH_SHIFT);
 	glRotatef( rquad, 1.0f, 0.0f, 0.0f );
-	drawAxes(1.0f);
-	
-	//draw bottom axes
-	glMoveCamera();
-	glTranslatef( 0.0f, -4.9f,DEPTH_SHIFT);
-	glRotatef(rquad, 1.0f, 0.0f, 0.0f);
-	drawAxes(1.0f);
-	
-	//draw left axes	
-	glMoveCamera();
-	glTranslatef(-4.9f,0.0f, DEPTH_SHIFT);
-	glRotatef(rquad, 1.0f, 0.0f, 0.0f);	
-	drawAxes(1.0f);
+	drawAxes(128.0f);
 	
 	//draw right axes	
-	glMoveCamera();
-	glTranslatef(4.9f,0.0f, DEPTH_SHIFT);
+	glLoadIdentity();
+	glTranslatef(512.0f*2.0f/3.0f, 0.0f, DEPTH_SHIFT);
 	glRotatef(rquad, 1.0f, 0.0f, 0.0f);	
-	drawAxes(1.0f);
+	drawAxes(128.0f);
 	
 	//draw front axes	
-	glMoveCamera();
-	glTranslatef(0.0f,0.0f, DEPTH_SHIFT+4.9f);
+	glLoadIdentity();
+	glTranslatef(512.0f*2.0f/3.0f, -768.0f/3.0f, DEPTH_SHIFT+4.9f);
 	glRotatef(rquad, 1.0f, 0.0f, 0.0f);	
-	drawAxes(1.0f);
+	drawAxes(128.0f);
+	
+	//draw bottom axes
+	glLoadIdentity();
+	glTranslatef( -512.0f*2.0f/3.0f, -768.0f/3.0f,DEPTH_SHIFT);
+	glRotatef(rquad, 1.0f, 0.0f, 0.0f);
+	drawAxes(128.0f);
+	
+	//draw left axes	
+	glLoadIdentity();
+	glTranslatef(-512.0f*2.0f/3.0f, 0.0f, DEPTH_SHIFT);
+	glRotatef(rquad, 1.0f, 0.0f, 0.0f);	
+	drawAxes(128.0f);
 	
 	//draw back axes	
-	glMoveCamera();
-	glTranslatef(0.0f,0.0f, DEPTH_SHIFT-4.9f);
+	glLoadIdentity();
+	glTranslatef(-512.0f*2.0f/3.0f, 768.0f/3.0f, DEPTH_SHIFT-4.9f);
 	glRotatef(rquad, 1.0f, 0.0f, 0.0f);	
-	drawAxes(1.0f);
+	drawAxes(128.0f);
 	
 
 	/* Draw it to the screen */
